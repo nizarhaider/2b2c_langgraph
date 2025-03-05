@@ -57,10 +57,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     'apple-blue': '#02AB55',  // LangChain green
                     'apple-gray': '#f5f5f7',
                     'apple-dark': '#1d1d1f',
-                    'message-user': '#F6EDFE',  // Light purple for user messages
-                    'message-assistant': '#EBFDF1',  // Light green for assistant messages
-                    'langchain-green': '#02AB55',
-                    'langchain-purple': '#9C3EE8'
+                    'message-user': 'white',  // Light purple for user messages
+                    'message-assistant': 'white',  // Light green for assistant messages
+                    'langchain-green': 'black',
+                    'langchain-purple': 'black',
+                    'l-d0': '#0D0D0D',
+                    'l-d1': '#171717',
+                    'l-d2': '#212121',
+                    'l-d3': '#303030',
+                    'l-d4': '#0D0D0D',
+                    'by700': '#FFD700',
                 },
                 boxShadow: {
                     'soft': '0 4px 14px 0 rgba(0, 0, 0, 0.05)'
@@ -297,15 +303,15 @@ def ChatMessage(msg: Dict[str, str], idx: str | int) -> Div:
 
     # Apply different styles based on message type
     bubble_class = (
-        "bg-message-user border-purple-200 border text-black shadow-sm"
+        "bg-message-user border-l-d0 border text-black shadow-sm"
         if is_human
-        else "bg-message-assistant border-green-200 border text-black shadow-sm"
+        else "bg-message-assistant border-l-d0 border text-black shadow-sm"
     )
     container_class = "justify-end" if is_human else "justify-start"
     avatar_class = (
-        "flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 border border-purple-200 shadow-sm"
+        "flex items-center justify-center w-8 h-8 rounded-full bg-black border border-black shadow-md"
         if is_human
-        else "flex items-center justify-center w-8 h-8 rounded-full bg-green-100 border border-green-200 shadow-sm"
+        else "flex items-center justify-center w-8 h-8 rounded-full bg-black border border-black shadow-md"
     )
     avatar_icon = "👤" if is_human else "🤖"
 
@@ -344,7 +350,7 @@ def ChatInputBubble(thread_id: str) -> Div:
                         "",  # Empty content to start
                         id="msg-input-div",
                         contenteditable="true",
-                        cls="w-full px-4 pr-14 text-base bg-white border border-gray-300 rounded-lg focus:outline-none min-h-10 max-h-40 overflow-y-auto py-6",
+                        cls="w-full px-4 pr-14 text-white bg-l-d3 border border-gray-300 rounded-lg focus:outline-none min-h-10 max-h-40 overflow-y-auto py-6",
                     ),
                     # Button positioned inside the input area
                     Div(
@@ -352,7 +358,7 @@ def ChatInputBubble(thread_id: str) -> Div:
                             "➤",  # Right arrow
                             type="submit",
                             id="send-button",
-                            cls="h-10 w-8 bg-apple-blue text-white text-lg rounded-full flex items-center justify-center hover:bg-apple-blue/90 shadow-sm",
+                            cls="h-10 w-8 bg-yellow-700 text-white text-lg rounded-full flex items-center justify-center hover:bg-yellow-500 shadow-md transition-colors duration-200 border border-yellow-700",
                         ),
                         cls="absolute right-2 bottom-0 flex items-center justify-center",
                     ),
@@ -383,7 +389,7 @@ def ChatInputBubble(thread_id: str) -> Div:
                 });
             """,
         ),
-        cls="px-6 py-4 bg-white border-t border-gray-200",
+        cls="px-6 py-4 bg-l-d3 border-t border-black shadow-900",
         id="chat-input-bubble",
     )
 
@@ -399,21 +405,21 @@ async def ConversationList(user_id: str, current_thread_id: str) -> Div:
 
     return Div(
         Div(
-            H2("Threads", cls="text-xl font-medium text-langchain-green mb-4"),
-            cls="flex items-center h-[69px] px-6 border-b border-gray-200 bg-white/90 sticky top-0 z-10",
+            H2("2B2K ChatDemo", cls="text-xl font-medium text-white mb-4"),
+            cls="flex items-center h-[69px] px-6 border-b border-l-d0 shadow-md bg-l-d1 sticky top-0 z-10",
         ),
         Div(
             *[
                 A(
                     Div(
-                        Div(f"Thread {i+1}", cls="font-medium text-sm"),
+                        Div(f"Thread {i+1}", cls="font-medium text-sm text-yellow-500"),
                         Div(f"{thread['created_at']}", cls="text-xs text-gray-500"),
                         cls="flex flex-col",
                     ),
                     href=f"/conversations/{thread['thread_id']}",
                     cls="block px-4 py-3 my-1.5 rounded-xl transition-all duration-200 hover:bg-gray-100"
                     + (
-                        " bg-purple-100 border-l-4 border-purple-500"
+                        " bg-l-d3 border-l-4 border-by700"
                         if thread["thread_id"] == current_thread_id
                         else ""
                     ),
@@ -423,7 +429,7 @@ async def ConversationList(user_id: str, current_thread_id: str) -> Div:
             cls="overflow-y-auto h-[calc(100vh-5rem)] px-2",
         ),
         id="sidebar",
-        cls="w-80 bg-white border-r border-gray-200 shadow-sm transition-all duration-100 ease-in-out",
+        cls="w-80 bg-l-d1 border-r border-l-d0 shadow-md transition-all duration-100 ease-in-out",
     )
 
 
@@ -465,23 +471,23 @@ async def conversation(thread_id: str, request: Request):
     new_thread_button = A(
         "New Thread",
         href="/new-thread",
-        cls="rounded-full px-4 py-2 bg-apple-blue text-white text-sm font-medium hover:bg-green-600 transition-colors duration-200 shadow-sm",
+        cls="rounded-full px-4 py-2 bg-yellow-700 text-white text-sm font-medium hover:bg-yellow-500 transition-colors duration-200 shadow-sm",
     )
 
     # Main chat content
     chat_content = Div(
         Div(
             Div(
-                "LangChain Chat Demo. Do not share private data - this is an unauthenticated demo!",
-                cls="text-sm text-gray-600 font-medium",
+                " ",
+                cls="text-sm text-white font-medium",
             ),
             new_thread_button,
-            cls="flex justify-between items-center py-4 px-6 bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10",
+            cls="flex justify-between items-center py-4 px-6 bg-l-d2 border-b border-l-d0 shadow-md sticky top-0 z-10",
         ),
         Div(
             *[ChatMessage(msg, i) for i, msg in enumerate(messages)],
             id="chatlist",
-            cls="chat-box h-[calc(100vh-10rem)] overflow-y-auto px-6 py-6 bg-gradient-to-br from-purple-50 to-green-50",
+            cls="chat-box h-[calc(100vh-10rem)] overflow-y-auto px-6 py-6 bg-l-d2",
         ),
         ChatInputBubble(thread_id),
         cls="flex-1 flex flex-col",
@@ -492,14 +498,14 @@ async def conversation(thread_id: str, request: Request):
         Div(
             "",
             id="sidebar-resizer",
-            cls="w-1 hover:w-2 bg-gray-200 hover:bg-apple-blue cursor-col-resize transition-all duration-200",
+            cls="w-1 hover:w-2 bg-l-d0 hover:bg-yellow-700 cursor-col-resize transition-all duration-200",
         ),
         chat_content,
         cls="flex w-full h-screen bg-gray-50 text-apple-dark font-sans overflow-hidden",
     )
     return (
         Title(
-            "LangChain Chat Demo",
+            "2B2K ChatDemo",
         ),
         page,
     )
