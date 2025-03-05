@@ -50,7 +50,7 @@ web_search_agent = create_react_agent(
 
 # Create supervisor workflow
 workflow = create_supervisor(
-    [research_agent, math_agent],
+    [web_search_agent, math_agent],
     model=model,
     prompt=(
         "You are a team supervisor managing a web search expert and a weather api. "
