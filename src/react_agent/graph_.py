@@ -21,10 +21,6 @@ from langchain_openai import OpenAIEmbeddings
 from pinecone import Pinecone, ServerlessSpec
 from langchain_openai import OpenAIEmbeddings
 
-from langchain.agents import AgentType, initialize_agent
-from langchain_community.tools.yahoo_finance_news import YahooFinanceNewsTool
-import yfinance as yf
-
 import os
 from datetime import datetime 
 
@@ -163,6 +159,7 @@ web_search = TavilySearchResults(
 # ==========================
 
 
+
 # Long-Term, Low-Risk Investor (Conservative Wealth Builder)  
 agent_lli = create_react_agent(
     model=model,
@@ -171,8 +168,6 @@ agent_lli = create_react_agent(
     prompt="As an AI financial assistant for a long-term, low-risk investor,"
     "your goal is to recommend stable and reliable investment options with a"
     "strong history of steady growth and minimal volatility. "
-    "Fetch real-time stock data before making recommendations. "
-    "Use metrics like P/E ratio, market cap, and dividend yield to identify strong candidates."
     "Using the given data, you have to"
     "Focus on blue-chip stocks,"
     "ETFs, and dividend-paying companies with solid fundamentals. Prioritize assets with low debt,"
@@ -242,7 +237,7 @@ agent_shi = create_react_agent(
 
 
 # Create supervisor workflow
-sup_debateTeam = create_supervisor(
+workflow = create_supervisor(
     [agent_lli, agent_lhi, agent_sli, agent_shi],
     model=model,
     supervisor_name="debate_team",
@@ -255,56 +250,7 @@ sup_debateTeam = create_supervisor(
         "4. agent_shi - Short-Term, High-Risk Investor (Aggressive Trader): Finds high-potential short-term trades with significant upside, using technical indicators and market sentiment analysis. "
         "Your goal is to leverage the expertise of each agent to provide comprehensive investment recommendations."
         "Consider the input from each agent, analyze their suggestions, and synthesize a balanced investment strategy that aligns with the client's risk tolerance and investment horizon."
+        "Display only the last results after all agents have provided their recommendations and the final decision is made."
         )
-).compile(name="debate_team")
-
-
-
-# display(
-#     Image(
-#         app.get_graph().draw_mermaid_png(
-#             draw_method=MermaidDrawMethod.API,
-#         )
-#     )
-# )
-
-# Create a Stock Data Retrieval Tool
-# This tool fetches real-time data that all agents can use in their analysis.
-
-def get_stock_data(ticker):
-    """Fetches real-time stock data from Yahoo Finance."""
-    stock = yf.Ticker(ticker)
-    data = stock.history(period="1d")
-    return {
-        "ticker": ticker,
-        "price": data['Close'].iloc[-1] if not data.empty else None,
-        "volume": data['Volume'].iloc[-1] if not data.empty else None,
-        "52_week_high": stock.info.get("fiftyTwoWeekHigh"),
-        "52_week_low": stock.info.get("fiftyTwoWeekLow"),
-        "market_cap": stock.info.get("marketCap"),
-        "pe_ratio": stock.info.get("trailingPE"),
-        "dividend_yield": stock.info.get("dividendYield"),
-    }
-
-# Enhance the Moderator to Validate Insights
-# The moderator ensures that agents' recommendations align with real-time data.
-
-agent_moderator = create_react_agent(
-    model=model,
-    tools=[get_stock_data],
-    name="analytics_moderator",
-    prompt="As the moderator of an AI-powered financial analytics debate team, "
-    "you must verify whether stock recommendations are supported by real-time data. "
-    "Check market trends, P/E ratios, and volatility before finalizing an investment strategy."
 )
-
-analytics_workflow = create_supervisor(
-    [agent_lli, agent_lhi, agent_sli, agent_shi, agent_moderator],
-    model=model,
-    supervisor_name="analytics_debate_team",
-    prompt="Manage an AI-powered financial analytics debate team with real-time market data validation. "
-    "Ensure recommendations are fact-checked against live stock data before finalizing an investment strategy."
-)
-
-app = analytics_workflow.compile()
-
+app = workflow.compile()

@@ -362,7 +362,7 @@ def ChatInputBubble(thread_id: str) -> Div:
                         ),
                         cls="absolute right-2 bottom-0 flex items-center justify-center",
                     ),
-                    # Hidden input to store the actual value
+                    # Hidden input to store the Trade Mindactual value
                     Input(type="hidden", name="msg", id="msg-input"),
                     cls="flex-grow relative",
                 ),
@@ -405,7 +405,7 @@ async def ConversationList(user_id: str, current_thread_id: str) -> Div:
 
     return Div(
         Div(
-            H2("2B2K ChatDemo", cls="text-xl font-medium text-white mb-4"),
+            H2("Trade Mind", cls="text-xl font-medium text-white mb-4"),
             cls="flex items-center h-[69px] px-6 border-b border-l-d0 shadow-md bg-l-d1 sticky top-0 z-10",
         ),
         Div(
@@ -506,7 +506,7 @@ async def conversation(thread_id: str, request: Request):
     )
     return (
         Title(
-            "2B2K ChatDemo",
+            "Trade Mind",
         ),
         page,
     )
