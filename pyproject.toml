@@ -23,6 +23,7 @@ dependencies = [
     "ipywidgets>=8.1.5",
     "ipykernel>=6.29.5",
     "langchain-pinecone>=0.2.3",
+    "yfinance>=0.2.54",
 ]
 
 

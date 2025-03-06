@@ -464,6 +464,7 @@ async def conversation(thread_id: str, request: Request):
             messages = values[-1]["messages"]
         else:
             messages = values["messages"]
+
     except Exception:
         messages = []
 
