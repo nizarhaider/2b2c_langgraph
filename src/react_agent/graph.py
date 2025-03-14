@@ -46,6 +46,12 @@ def destination_search(
                 ]
             )
     
+
+    for tool_call in ai_msg.tool_calls:
+        print(tool_call)
+        tool_messages = [ToolMessage(content=tool_call, tool_id=tool_call.get('id'))]
+        print(tool_messages)
+
     return {"messages": [ai_msg]}
 
 def destination_summarizer(
