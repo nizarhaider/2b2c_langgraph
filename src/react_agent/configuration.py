@@ -1,7 +1,7 @@
 """Define the configurable parameters for the agent."""
 
 from __future__ import annotations
-
+import os
 from dataclasses import dataclass, field, fields
 from typing import Annotated, Optional
 
@@ -9,6 +9,7 @@ from langchain_core.runnables import RunnableConfig, ensure_config
 
 from react_agent import prompts
 
+GPLACES_API_KEY = os.getenv("GPLACES_API_KEY")
 
 @dataclass(kw_only=True)
 class Configuration:
@@ -21,9 +22,12 @@ class Configuration:
             "Should be in the form: provider/model-name."
         },
     )
+    api_key: str = field(
+        default=GPLACES_API_KEY
+    )
 
     max_search_results: int = field(
-        default=10,
+        default=5,
         metadata={
             "description": "The maximum number of search results to return for each search query."
         },

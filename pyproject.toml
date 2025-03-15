@@ -19,6 +19,7 @@ dependencies = [
     "tavily-python>=0.4.0",
     "langgraph-cli[inmem]>=0.1.76",
     "langchain-exa>=0.2.1",
+    "googlemaps>=4.10.0",
 ]
 
 
