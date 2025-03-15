@@ -10,7 +10,7 @@ from typing import Dict, List, Literal
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.runnables import RunnableConfig
-from langgraph.graph import StateGraph
+from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
 from langgraph.types import interrupt, Command
 from langchain_core.messages.base import BaseMessage
@@ -27,7 +27,7 @@ llm = init_chat_model("gpt-4o", model_provider="openai")
 
 def destination_search(
     state: State
-) -> Dict[str, List[AIMessage]]:
+):
     """Search the web for given query"""  # noqa: D202, D415
 
     system_message = DESTINATION_SEARCH_PROMPT.format(
@@ -35,6 +35,13 @@ def destination_search(
         current_destination_json=state.destination_json,
         feedback=state.destination_feedback
     )
+
+    last_message = state.messages[-1]
+
+    if isinstance(last_message, ToolMessage):
+        return Command(
+            goto="destination_summarizer"
+        )
 
     llm_tools = llm.bind_tools(TOOLS)
     ai_msg = llm_tools.invoke(
@@ -45,25 +52,23 @@ def destination_search(
                     [msg for msg in state.messages if isinstance(msg, HumanMessage)][-1]
                 ]
             )
-    
 
-    for tool_call in ai_msg.tool_calls:
-        print(tool_call)
-        tool_messages = [ToolMessage(content=tool_call, tool_id=tool_call.get('id'))]
-        print(tool_messages)
-
-    return {"messages": [ai_msg]}
+    return {
+        "messages": [ai_msg]
+    }
 
 def destination_summarizer(
         state: State
 ) -> dict:
+    # print(state.messages)
     system_message = DESTINATION_SUMMARIZER_PROMPT
 
     llm_json = llm.with_structured_output(DESTINATION_SCHEMA)
-
+    print(state.messages)
     response = llm_json.invoke(
             [SystemMessage(content=system_message)] +
-            [[msg for msg in state.messages if isinstance(msg, AIMessage)][-1]]         
+            [[msg for msg in state.messages if isinstance(msg, AIMessage)][-1]] +     
+            [[msg for msg in state.messages if isinstance(msg, ToolMessage)][-1]]     
     )
 
     return {
@@ -71,7 +76,7 @@ def destination_summarizer(
     }
 
 def reflection_node(
-        state: State
+    state: State
 ) -> Command[Literal['__end__', 'destination_search']]:
     """ Reflect on the web search agent output and return feedback."""
 
@@ -126,16 +131,29 @@ builder.add_node(reflection_node)
 builder.add_node("tools", ToolNode(TOOLS))
 
 builder.add_edge("__start__", "destination_search")
-builder.add_edge("destination_search", "destination_summarizer")
-builder.add_edge("destination_summarizer", "reflection_node")
 
-# Add a conditional edge to determine the next step after `call_model`
+def route_model_output(state: State) -> Literal["destination_summarizer", "tools"]:
+    """Determine the next node based on the model's output."""
+    last_message = state.messages[-1]
+    
+    if isinstance(last_message, ToolMessage):
+        return "destination_summarizer"
+    
+    # Otherwise we execute the requested actions
+    return "tools"
+
+builder.add_conditional_edges(
+    "destination_search",
+    route_model_output,
+)
 builder.add_edge("tools", "destination_search")
+# builder.add_edge("destination_search", "destination_summarizer")
+builder.add_edge("destination_summarizer", "reflection_node")
 builder.add_edge("reflection_node","__end__")
 
 
 graph = builder.compile(
-    interrupt_before=[],  # Add node names here to update state before they're called
-    interrupt_after=[],  # Add node names here to update state after they're called
+    interrupt_before=[],  
+    interrupt_after=[],  
 )
 graph.name = "React Agent" 

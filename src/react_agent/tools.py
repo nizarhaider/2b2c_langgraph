@@ -12,25 +12,23 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import InjectedToolArg
 from typing_extensions import Annotated
-from langchain_core.tools.base import InjectedToolCallId
 
 from react_agent.configuration import Configuration
 
 
-async def search(
+def search(
     query: str, *, config: Annotated[RunnableConfig, InjectedToolArg]
-):
-    """Search for general web results."""
-    
+) -> Optional[list[dict[str, Any]]]:
+    """Search for general web results.
+
+    This function performs a search using the Tavily search engine, which is designed
+    to provide comprehensive, accurate, and trusted results. It's particularly useful
+    for answering questions about current events.
+    """
     configuration = Configuration.from_runnable_config(config)
     wrapped = TavilySearchResults(max_results=configuration.max_search_results)
-    result = await wrapped.ainvoke({"query": query})
-
-    return {
-        "result": cast(list[dict[str, Any]], result),
-        "messages": [result]
-    }
-    
+    result = wrapped.invoke({"query": query})
+    return cast(list[dict[str, Any]], result)
 
 
 TOOLS: List[Callable[..., Any]] = [search]
