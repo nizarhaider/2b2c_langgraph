@@ -37,17 +37,6 @@
                 "location_name": "Kandy, Sri Lanka"
             }
         },
-        "stops_area_entity_ref": "lo-UGqMeMKF",
-        "stops_area_name": "Kandy",
-        "roadtrip": false,
-        "owner": {
-            "user_ref": "u-cH9c42A7",
-            "first_name": "Nizar",
-            "last_name": "Haidar",
-            "handle": "nizar-haidar",
-            "image_url": "https://lh3.googleusercontent.com/a/ACg8ocJh3Hno3AejpTKF-UsHJcsLHMjymtlNi7MOO0HNtxvmPBYtrASYcg=s96-c",
-            "public_account": true
-        },
         "budget": "$",
         "destination": {
             "name": "Kandy",

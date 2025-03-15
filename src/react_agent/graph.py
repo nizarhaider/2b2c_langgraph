@@ -21,6 +21,7 @@ from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
 from react_agent.prompts import DESTINATION_SEARCH_PROMPT, REFLECTION_PROMPT, DESTINATION_SUMMARIZER_PROMPT
 from react_agent.schemas import DESTINATION_SCHEMA, FLIGHTS_AND_HOTELS, REFLECTION_SCHEMA
+from langgraph.checkpoint.memory import MemorySaver
 
 llm = init_chat_model("gpt-4o", model_provider="openai")
 
@@ -64,7 +65,6 @@ def destination_summarizer(
     system_message = DESTINATION_SUMMARIZER_PROMPT
 
     llm_json = llm.with_structured_output(DESTINATION_SCHEMA)
-    print(state.messages)
     response = llm_json.invoke(
             [SystemMessage(content=system_message)] +
             [[msg for msg in state.messages if isinstance(msg, AIMessage)][-1]] +     
@@ -93,7 +93,7 @@ def reflection_node(
 
     if response['is_satisfactory']:
         return Command(
-            goto='flight_and_hotel_search'
+            goto='__end__'
         )
     else:
         return Command(
@@ -103,23 +103,32 @@ def reflection_node(
             }
         )
 
-def human_editing(state: State):
+def human_node(state: State) -> Command[Literal['__end__', 'destination_search']]:
 
-    result = interrupt(
+    feedback = interrupt(
         # Interrupt information to surface to the client.
         # Can be any JSON serializable value.
         {
-            "task": "Review the output from the LLM and make any necessary edits.",
+            "task": "Does this look good?. Reply with yes to confirm",
             "llm_generated_summary": state.destination_json
         }
     )
 
-    # Update the state with the edited text
-    return Command(
-        resume={'edited_text': result["edited_text"]},
-        update={
-        "llm_generated_summary": result["edited_text"]
-    })
+    print(f'FEEDBACK IS {feedback}')
+
+    # If satisfactory then return to end
+    if feedback.lower() in ['yes', 'YES', 'y', 'Yes'] or len(feedback) < 5:
+        return Command(
+            goto='__end__'
+        )
+    else:
+        # Update the state with the edited text
+        return Command(
+            resume={"destination_feedback": feedback},
+            goto='destination_search',
+            update={
+            "destination_feedback": feedback
+        })
 
 builder = StateGraph(State, input=InputState, config_schema=Configuration)
 
@@ -127,7 +136,7 @@ builder = StateGraph(State, input=InputState, config_schema=Configuration)
 builder.add_node(destination_search)
 builder.add_node(destination_summarizer)
 builder.add_node(reflection_node)
-# builder.add_node(human_editing)
+# builder.add_node(human_node)
 builder.add_node("tools", ToolNode(TOOLS))
 
 builder.add_edge("__start__", "destination_search")
@@ -149,10 +158,12 @@ builder.add_conditional_edges(
 builder.add_edge("tools", "destination_search")
 # builder.add_edge("destination_search", "destination_summarizer")
 builder.add_edge("destination_summarizer", "reflection_node")
-builder.add_edge("reflection_node","__end__")
+# builder.add_edge("reflection_node","human_node")
 
+checkpointer = MemorySaver()
 
 graph = builder.compile(
+    checkpointer=checkpointer,
     interrupt_before=[],  
     interrupt_after=[],  
 )
