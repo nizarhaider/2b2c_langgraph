@@ -1,44 +1,5 @@
 """Schemas."""
 
-DESTINATION_SCHEMA={
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Destination",
-  "type": "object",
-  "required": ["areasOfAttraction", "activities", "cost"],
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "areasOfAttraction": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" }
-        }
-      }
-    },
-    "activities": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "cost": { "type": "number" }
-        }
-      }
-    },
-    "cost": {
-      "type": "object",
-      "properties": {
-        "currency": { "type": "string" },
-        "averageDailyCost": { "type": "number" }
-      }
-    }
-  }
-}
-
 REFLECTION_SCHEMA={
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Destination",
@@ -54,79 +15,88 @@ REFLECTION_SCHEMA={
   }
 }
 
-FLIGHTS_AND_HOTELS = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "FlightsAndHotels",
-  "type": "object",
-  "required": ["dates", "airlines", "cost"],
-  "properties": {
-    "dates": {
-      "type": "object",
-      "properties": {
-        "departureDate": { "type": "string", "format": "date" },
-        "returnDate": { "type": "string", "format": "date" }
-      }
-    },
-    "airlines": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "hotels": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "checkInDate": { "type": "string", "format": "date" },
-          "checkOutDate": { "type": "string", "format": "date" }
-        }
-      }
-    },
-    "cost": {
-      "type": "object",
-      "properties": {
-        "flights": { "type": "number" },
-        "hotels": { "type": "number" },
-        "total": { "type": "number" }
-      }
-    }
-  }
-}
-
-
 ITINERARY_SCHEMA = {
+  "title": "itinerary_schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "day": { "type": "integer", "minimum": 1 },
-    "date": { "type": "string", "format": "date" },
-    "activities": {
+    "destination": { "type": "string" },
+    "country": { "type": "string" },
+    "trip_duration": { "type": "integer", "minimum": 1 },
+    "days": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "name": { "type": "string" },
-          "type": { "type": "string", "enum": ["attraction", "dining"] },
-          "location": { "type": "string" },
-          "cost": { "type": "number", "minimum": 0 },
-          "rating": { "type": "number", "minimum": 0, "maximum": 5 },
-          "review_summary": { "type": "string" },
-          "image_url": { "type": "string", "format": "uri" },
-          "website_url": { "type": "string", "format": "uri" },
-          "weather_prediction": { "type": "string" },
-          "tips": { "type": "string" }
+          "day_number": { "type": "integer", "minimum": 1 },
+          "attractions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "location": { "type": "string" },
+                "cost": { 
+                  "oneOf": [
+                    { "type": "number", "minimum": 0 },
+                    { "type": "string", "pattern": "^\\$[0-9]+(\\.[0-9]{1,2})?$" }
+                  ]
+                },
+                "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+                "reviews": { "type": "string" },
+                "website_url": { "type": "string" },
+                "image_url": { "type": "string" },
+                "weather": { "type": "string" },
+                "tips": { "type": "string" }
+              },
+              "required": ["name", "type", "location"]
+            }
+          },
+          "dining": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "location": { "type": "string" },
+                "cost": { 
+                  "oneOf": [
+                    { "type": "number", "minimum": 0 },
+                    { "type": "string", "pattern": "^\\$[0-9]+(\\.[0-9]{1,2})?( per person)?$" }
+                  ]
+                },
+                "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+                "reviews": { "type": "string" },
+                "website_url": { "type": "string", "format": "uri" },
+                "image_url": { "type": "string", "format": "uri" }
+              },
+              "required": ["name", "type", "location"]
+            }
+          },
+          "daily_cost_estimate": { "type": "number", "minimum": 0 }
         },
-        "required": ["name", "type", "location", "cost"]
+        "required": ["day_number", "attractions", "dining"]
       }
     },
-    "daily_cost": { "type": "number", "minimum": 0 }
+    "general_tips": {
+      "type": "object",
+      "properties": {
+        "transportation": { "type": "string" },
+        "must_try_dishes": { "type": "array", "items": { "type": "string" } },
+        "cultural_etiquette": { "type": "string" },
+        "safety_tips": { "type": "string" },
+        "useful_phrases": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "total_estimated_cost": { "type": "number", "minimum": 0 }
   },
-  "required": ["day", "activities", "daily_cost"]
+  "required": ["destination", "country", "trip_duration", "days"]
 }
 
 ACCOMODATIONS_SCHEMA = {
+  "title": "accomodations_schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "array",
   "items": {
@@ -145,6 +115,7 @@ ACCOMODATIONS_SCHEMA = {
 }
 
 USER_SCHEMA = {
+  "title": "user_schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
@@ -154,7 +125,7 @@ USER_SCHEMA = {
     "number_of_kids": { "type": "integer", "minimum": 0, "default": 0 },
     "number_of_days": { "type": "integer", "minimum": 1, "default": 7 },
     "budget": { "type": "number", "minimum": 0, "default": 1000 },
-    "currency": { "type": "string", "default": "USD" },
+    "currency": { "type": "string" },
     "has_kids": { "type": "boolean", "default": False },
     "has_disability": { "type": "boolean", "default": False },
     "has_pets": { "type": "boolean", "default": False },

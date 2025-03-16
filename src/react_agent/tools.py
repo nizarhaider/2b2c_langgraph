@@ -6,25 +6,25 @@ These tools are intended as free examples to get started. For production use,
 consider implementing more robust and specialized tools tailored to your needs.
 """
 import os
-
 from typing import Any, Callable, List, Optional, cast
 
+import aiohttp
+import requests
+from exa_py import Exa
+from langchain_community.tools import GooglePlacesTool
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.runnables import RunnableConfig
-from langchain_core.tools import InjectedToolArg
+from langchain_core.tools import InjectedToolArg, tool
+from tavily import TavilyClient, AsyncTavilyClient
 from typing_extensions import Annotated
 
 from react_agent.configuration import Configuration
-from langchain_community.tools import GooglePlacesTool
-from exa_py import Exa
-from langchain_core.tools import tool
-
-import requests
 
 exa = Exa(api_key=os.environ["EXA_API_KEY"])
+client = AsyncTavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
 
-def query_google_places(
+async def query_google_places(
         query: str,
         config: Annotated[RunnableConfig, InjectedToolArg]
 ) -> dict:
@@ -68,29 +68,32 @@ def query_google_places(
     - The search includes detailed attributes for each place, including user ratings, pricing details, 
       website URLs, and more.
     """  # noqa: D202, D212, D401
+    async with aiohttp.ClientSession() as session:
 
-    configuration = Configuration.from_runnable_config(config)
+        configuration = Configuration.from_runnable_config(config)
 
-    url = "https://places.googleapis.com/v1/places:searchText"
-    headers = {
-        'X-Goog-Api-Key': configuration.api_key,
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "X-Goog-FieldMask": "places.attributions,places.id,places.displayName,places.googleMapsLinks,places.formattedAddress,places.businessStatus,places.types,places.location,places.internationalPhoneNumber,places.rating,places.priceLevel,places.priceRange,places.websiteUri,places.userRatingCount,places.websiteUri,places.goodForChildren,places.liveMusic,places.paymentOptions,places.servesBeer,places.servesVegetarianFood"
-    }
-    data = {
-        "textQuery": query,
-        "pageSize": 5
-    }
-    response = requests.post(url, headers=headers, json=data)
-    
-    response.raise_for_status()
-    return response.json()
+        url = "https://places.googleapis.com/v1/places:searchText"
+        headers = {
+            'X-Goog-Api-Key': configuration.api_key,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Goog-FieldMask": "places.attributions,places.id,places.displayName,places.googleMapsLinks,places.formattedAddress,places.businessStatus,places.types,places.location,places.internationalPhoneNumber,places.rating,places.priceLevel,places.priceRange,places.websiteUri,places.userRatingCount,places.websiteUri,places.goodForChildren,places.liveMusic,places.paymentOptions,places.servesBeer,places.servesVegetarianFood,places.reviews"
+        }
+        data = {
+            "textQuery": query,
+            "pageSize": 5
+        }
 
+        async with session.post(url, headers=headers, json=data) as response:
+            response.raise_for_status()
+            return await response.json()
 
-def tavily_web_search(
-    query: str, *, config: Annotated[RunnableConfig, InjectedToolArg]
-) -> Optional[list[dict[str, Any]]]:
+            
+
+async def tavily_web_search(
+        query: str,
+        config: Annotated[RunnableConfig, InjectedToolArg]
+) -> dict:
     """
     Performs a general web search using the Tavily search engine to retrieve trusted and comprehensive results.
 
@@ -125,14 +128,63 @@ def tavily_web_search(
     - The search results may include a mix of sources, such as blogs, news articles, and other online content.
     - The search engine is optimized for current, real-time information and highly relevant content.
     - The results are enriched with extra details such as snippets, URLs, and source information to help users find valuable resources.
-    """  # noqa: D212, D401
+    """  # noqa: D202, D212, D401
+
     configuration = Configuration.from_runnable_config(config)
-    wrapped = TavilySearchResults(max_results=configuration.max_search_results, include_images=True)
-    result = wrapped.invoke({"query": query})
-    return cast(list[dict[str, Any]], result)
+
+    response = await client.search(
+        query=query,
+        include_images=True,
+        max_results=configuration.max_search_results,
+        time_range='year'
+    )
+    return response
+
+# async def tavily_web_search(
+#     query: str, *, config: Annotated[RunnableConfig, InjectedToolArg]
+# ) -> Optional[list[dict[str, Any]]]:
+#     """
+#     Performs a general web search using the Tavily search engine to retrieve trusted and comprehensive results.
+
+#     This function utilizes the Tavily search engine, which is designed to provide highly relevant, 
+#     accurate, and up-to-date results, especially for queries related to current events, travel destinations, 
+#     or other frequently changing information. The results include articles, blog posts, and other web content 
+#     that match the search query.
+
+#     Parameters:
+#     - query (str): The search query string, which can be a question or a topic that the user wants to research.
+#     - config (RunnableConfig): Configuration settings for the search, including parameters like the 
+#       maximum number of results to fetch and other filters for refining the search.
+
+#     Returns:
+#     - Optional[list[dict[str, Any]]]: A list of dictionaries containing the search results. Each dictionary 
+#       represents a single result and may contain keys such as the title, snippet, URL, and other metadata for 
+#       each item. If no results are found, the function will return `None`.
+
+#     Example:
+#     >>> tavily_web_search("best family-friendly attractions in Sri Lanka")
+#     [
+#         {
+#             "title": "Top 10 Family-Friendly Attractions in Sri Lanka",
+#             "snippet": "Sri Lanka offers a variety of family-friendly attractions, from wildlife safaris to beach resorts.",
+#             "url": "https://www.example.com/family-friendly-attractions-sri-lanka",
+#             "source": "Travel Blog"
+#         },
+#         ...
+#     ]
+
+#     Notes:
+#     - The search results may include a mix of sources, such as blogs, news articles, and other online content.
+#     - The search engine is optimized for current, real-time information and highly relevant content.
+#     - The results are enriched with extra details such as snippets, URLs, and source information to help users find valuable resources.
+#     """  # noqa: D212, D401
+#     configuration = Configuration.from_runnable_config(config)
+#     wrapped = TavilySearchResults(max_results=configuration.max_search_results, include_images=True)
+#     result = await wrapped.ainvoke({"query": query})
+#     return cast(list[dict[str, Any]], result)
 
 
-def exa_web_search(query: str):
+# def exa_web_search(query: str):
     """Search for webpages based on the query and retrieve their contents."""
     return exa.search_and_contents(
         query, use_autoprompt=True, num_results=10, text=True, highlights=True

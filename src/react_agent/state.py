@@ -32,4 +32,4 @@ class State(InputState):
     user_profile: dict = field(default_factory=dict)
     itinerary: dict = field(default_factory=dict)
     itinerary_feedback: str = field(default="")
-
+    iteration_counter: int = field(default=0)
