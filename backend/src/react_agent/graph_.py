@@ -26,6 +26,16 @@ from react_agent.tools import TOOLS
 from react_agent.prompts import VALIDATE_INPUT_PROMPT, GENERATE_ITINERARY_PROMPT, FORMAT_ITINERARY_PROMPT, REFLECTION_ITINERARY_PROMPT, USER_ACCOMODATIONS_INPUT_PROMPT
 from react_agent.schemas import ITINERARY_SCHEMA, USER_SCHEMA, ACCOMMODATION_SCHEMA, REFLECTION_SCHEMA
 from langgraph.checkpoint.memory import MemorySaver
+from typing import List, Optional, TypedDict
+
+from langchain.output_parsers.openai_tools import JsonOutputToolsParser
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnableConfig
+from langchain_openai import ChatOpenAI
+from langgraph.graph import END, StateGraph
+from langgraph.graph.graph import CompiledGraph
+
 
 llm = init_chat_model("gpt-4o", model_provider="openai")
 
@@ -298,111 +308,107 @@ def validate_itinerary(state: State) -> dict:
 #     }
 
 
+def create_graph() -> CompiledGraph:
+    builder = StateGraph(State, input=InputState, config_schema=Configuration)
 
+    # Define the two nodes we will cycle between
+    builder.add_node(validate_user_query)
+    builder.add_node(update_user_profile)
 
+    builder.add_node(research_itinerary)
+    builder.add_node(format_itinerary)
+    builder.add_node(review_itinerary)
+    builder.add_node(validate_itinerary)
+    # builder.add_node(get_accomodations_info)
+    builder.add_node("tools", ToolNode(TOOLS, messages_key="itinerary_messages"))
 
-###################BUILDERS#####################
-builder = StateGraph(State, input=InputState, config_schema=Configuration)
+    builder.add_edge("__start__", "validate_user_query")
 
-# Define the two nodes we will cycle between
-builder.add_node(validate_user_query)
-builder.add_node(update_user_profile)
+    def route_validation_logic(state: State) -> Literal["update_user_profile", "validate_user_query"]:
+        """Determine the next node based on the model's output."""
+        last_message = state.itinerary_messages[-1]
 
-builder.add_node(research_itinerary)
-builder.add_node(format_itinerary)
-builder.add_node(review_itinerary)
-builder.add_node(validate_itinerary)
-# builder.add_node(get_accomodations_info)
-builder.add_node("tools", ToolNode(TOOLS, messages_key="itinerary_messages"))
+        if isinstance(last_message, AIMessage):
+            val_resp = json.loads(last_message.content)
 
-builder.add_edge("__start__", "validate_user_query")
-
-def route_validation_logic(state: State) -> Literal["update_user_profile", "validate_user_query"]:
-    """Determine the next node based on the model's output."""
-    last_message = state.itinerary_messages[-1]
-
-    if isinstance(last_message, AIMessage):
-        val_resp = json.loads(last_message.content)
-
-        # If last message is Ai and is_valid then pass
-        if val_resp.get('is_valid'):
-            return "update_user_profile"
+            # If last message is Ai and is_valid then pass
+            if val_resp.get('is_valid'):
+                return "update_user_profile"
+            
+        return 'validate_user_query'
         
-    return 'validate_user_query'
-    
-builder.add_conditional_edges(
-    "validate_user_query",
-    route_validation_logic,
-)
+    builder.add_conditional_edges(
+        "validate_user_query",
+        route_validation_logic,
+    )
 
-def route_model_output(state: State) -> Literal["format_itinerary", "tools"]:
-    """Determine the next node based on the model's output."""
-    last_message = state.itinerary_messages[-1]
-    
-    if isinstance(last_message, AIMessage):
-        if '<FINAL_OUTPUT>' in last_message.content:
-            return "format_itinerary"
-    
-    # Otherwise we execute the requested actions
-    return "tools"
+    def route_model_output(state: State) -> Literal["format_itinerary", "tools"]:
+        """Determine the next node based on the model's output."""
+        last_message = state.itinerary_messages[-1]
+        
+        if isinstance(last_message, AIMessage):
+            if '<FINAL_OUTPUT>' in last_message.content:
+                return "format_itinerary"
+        
+        # Otherwise we execute the requested actions
+        return "tools"
 
-builder.add_conditional_edges(
-    "research_itinerary",
-    route_model_output,
-)
+    builder.add_conditional_edges(
+        "research_itinerary",
+        route_model_output,
+    )
 
-def route_itinerary_validation_logic(state: State) -> Literal["validate_itinerary", "update_user_profile", "__end__"]:
-    """Determine the next node based on the users output."""
-    last_message = state.itinerary_messages[-1]
+    def route_itinerary_validation_logic(state: State) -> Literal["validate_itinerary", "update_user_profile", "__end__"]:
+        """Determine the next node based on the users output."""
+        last_message = state.itinerary_messages[-1]
 
-    if isinstance(last_message, AIMessage):
-        val_resp = json.loads(last_message.content)
+        if isinstance(last_message, AIMessage):
+            val_resp = json.loads(last_message.content)
 
-        if val_resp.get('is_approved'):
-            return "__end__"
+            if val_resp.get('is_approved'):
+                return "__end__"
 
-        if not val_resp.get('is_approved') and val_resp.get('valid_feedback'):
-            return "update_user_profile"
-    
-        if not val_resp.get('is_approved') and not val_resp.get('valid_feedback'):
-            return 'validate_itinerary'
+            if not val_resp.get('is_approved') and val_resp.get('valid_feedback'):
+                return "update_user_profile"
+        
+            if not val_resp.get('is_approved') and not val_resp.get('valid_feedback'):
+                return 'validate_itinerary'
 
-    return 'validate_itinerary'
-    
-builder.add_conditional_edges(
-    "validate_itinerary",
-    route_itinerary_validation_logic
-)
+        return 'validate_itinerary'
+        
+    builder.add_conditional_edges(
+        "validate_itinerary",
+        route_itinerary_validation_logic
+    )
 
-# def route_accomodation_validation_logic(state: State) -> Literal["get_accomodations_info", "__end__"]:
-#     """Determine the next node based on the users output."""
-#     last_message = state.itinerary_messages[-1]
+    # def route_accomodation_validation_logic(state: State) -> Literal["get_accomodations_info", "__end__"]:
+    #     """Determine the next node based on the users output."""
+    #     last_message = state.itinerary_messages[-1]
 
-#     if isinstance(last_message, AIMessage):
-#         val_resp = json.loads(last_message.content)
+    #     if isinstance(last_message, AIMessage):
+    #         val_resp = json.loads(last_message.content)
 
-#         if val_resp.get('have_sufficient_info'):
-#             return "__end__"
+    #         if val_resp.get('have_sufficient_info'):
+    #             return "__end__"
 
-#         if not val_resp.get('have_sufficient_info'):
-#             return "get_accomodations_info"
+    #         if not val_resp.get('have_sufficient_info'):
+    #             return "get_accomodations_info"
 
-#     return 'get_accomodations_info'
+    #     return 'get_accomodations_info'
 
-# builder.add_conditional_edges(
-#     "get_accomodations_info",
-#     route_accomodation_validation_logic
-# )
+    # builder.add_conditional_edges(
+    #     "get_accomodations_info",
+    #     route_accomodation_validation_logic
+    # )
 
-builder.add_edge("update_user_profile", "research_itinerary")
-builder.add_edge("tools", "research_itinerary")
-builder.add_edge("format_itinerary", "review_itinerary")
+    builder.add_edge("update_user_profile", "research_itinerary")
+    builder.add_edge("tools", "research_itinerary")
+    builder.add_edge("format_itinerary", "review_itinerary")
 
-checkpointer = MemorySaver()
+    checkpointer = MemorySaver()
 
-graph = builder.compile(
-    checkpointer=checkpointer,
-    interrupt_before=[],  
-    interrupt_after=[],  
-)
-graph.name = "agent" 
+    graph = builder.compile(
+        checkpointer=checkpointer
+    )
+
+    return graph

@@ -20,7 +20,7 @@ from typing_extensions import Annotated
 
 from react_agent.configuration import Configuration
 
-exa = Exa(api_key=os.environ["EXA_API_KEY"])
+# exa = Exa(api_key=os.environ["EXA_API_KEY"])
 client = AsyncTavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
 
@@ -183,10 +183,10 @@ async def tavily_web_search(
 
 
 # def exa_web_search(query: str):
-    """Search for webpages based on the query and retrieve their contents."""
-    return exa.search_and_contents(
-        query, use_autoprompt=True, num_results=10, text=True, highlights=True
-    )
+    # """Search for webpages based on the query and retrieve their contents."""
+    # return exa.search_and_contents(
+    #     query, use_autoprompt=True, num_results=10, text=True, highlights=True
+    # )
 
 # async def get_hotel_currencies(
 #         config: Annotated[RunnableConfig, InjectedToolArg],
