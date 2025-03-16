@@ -10,6 +10,8 @@ from langchain_core.runnables import RunnableConfig, ensure_config
 from react_agent import prompts
 
 GPLACES_API_KEY = os.getenv("GPLACES_API_KEY")
+RAPID_API_JEY = os.getenv("RAPID_API_JEY")
+
 
 @dataclass(kw_only=True)
 class Configuration:
@@ -22,8 +24,11 @@ class Configuration:
             "Should be in the form: provider/model-name."
         },
     )
-    api_key: str = field(
+    google_places_api_key: str = field(
         default=GPLACES_API_KEY
+    )
+    booking_api_key: str = field(
+        default=RAPID_API_JEY
     )
 
     max_search_results: int = field(

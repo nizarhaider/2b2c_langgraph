@@ -95,23 +95,74 @@ ITINERARY_SCHEMA = {
   "required": ["destination", "country", "trip_duration", "days"]
 }
 
-ACCOMODATIONS_SCHEMA = {
-  "title": "accomodations_schema",
+ACCOMMODATION_SCHEMA = {
+  "title": "accommodation_schema",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "name": { "type": "string" },
-      "location": { "type": "string" },
-      "cost_per_night": { "type": "number", "minimum": 0 },
-      "rating": { "type": "number", "minimum": 0, "maximum": 5 },
-      "review_summary": { "type": "string" },
-      "image_url": { "type": "string", "format": "uri" },
-      "website_url": { "type": "string", "format": "uri" }
+  "type": "object",
+  "properties": {
+    "dest_id": {
+      "type": "string", 
+      "description": "Destination ID retrieved from searchDestination endpoint"
     },
-    "required": ["name", "location", "cost_per_night"]
-  }
+    "search_type": {
+      "type": "string", 
+      "description": "Search type retrieved from searchDestination endpoint",
+      "default": "CITY"
+    },
+    "arrival_date": {
+      "type": "string", 
+      "format": "date", 
+      "description": "Check-in date in yyyy-mm-dd format"
+    },
+    "departure_date": {
+      "type": "string", 
+      "format": "date", 
+      "description": "Check-out date in yyyy-mm-dd format"
+    },
+    "adults": {
+      "type": "integer", 
+      "minimum": 1, 
+      "default": 1, 
+      "description": "Number of guests 18 years or older"
+    },
+    "children_age": {
+      "type": "array",
+      "items": {
+        "type": "integer", 
+        "minimum": 0, 
+        "maximum": 17
+      },
+      "description": "List of ages for children under 18 years",
+      "default": []
+    },
+    "room_qty": {
+      "type": "integer", 
+      "minimum": 1, 
+      "default": 1, 
+      "description": "Number of rooms required"
+    },
+    "currency_code": {
+      "type": "string", 
+      "description": "Currency code for pricing (e.g., USD, EUR, GBP)", 
+      "default": "USD"
+    },
+    "price_min": {
+      "type": "number",
+      "description": "Minimum price filter for search",
+      "minimum": 0
+    },
+    "price_max": {
+      "type": "number",
+      "description": "Maximum price filter for search",
+      "minimum": 0
+    },
+  },
+  "required": [
+    "dest_id", 
+    "search_type", 
+    "arrival_date", 
+    "departure_date"
+  ]
 }
 
 USER_SCHEMA = {
@@ -139,5 +190,3 @@ USER_SCHEMA = {
   },
   "required": ["number_of_people", "budget", "number_of_days", "destination"]
 }
-
-

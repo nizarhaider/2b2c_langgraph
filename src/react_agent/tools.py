@@ -74,7 +74,7 @@ async def query_google_places(
 
         url = "https://places.googleapis.com/v1/places:searchText"
         headers = {
-            'X-Goog-Api-Key': configuration.api_key,
+            'X-Goog-Api-Key': configuration.google_places_api_key,
             "Accept": "application/json",
             "Content-Type": "application/json",
             "X-Goog-FieldMask": "places.attributions,places.id,places.displayName,places.googleMapsLinks,places.formattedAddress,places.businessStatus,places.types,places.location,places.internationalPhoneNumber,places.rating,places.priceLevel,places.priceRange,places.websiteUri,places.userRatingCount,places.websiteUri,places.goodForChildren,places.liveMusic,places.paymentOptions,places.servesBeer,places.servesVegetarianFood,places.reviews"
@@ -86,9 +86,7 @@ async def query_google_places(
 
         async with session.post(url, headers=headers, json=data) as response:
             response.raise_for_status()
-            return await response.json()
-
-            
+            return await response.json()         
 
 async def tavily_web_search(
         query: str,
@@ -189,5 +187,127 @@ async def tavily_web_search(
     return exa.search_and_contents(
         query, use_autoprompt=True, num_results=10, text=True, highlights=True
     )
+
+async def get_hotel_currencies(
+        config: Annotated[RunnableConfig, InjectedToolArg],
+) -> dict:
+    """
+    Get available hotel currencies from this API 
+    
+    Returns:
+    --------
+    dict
+        JSON response containing currency code results.
+    """  # noqa: D212, D415
+    async with aiohttp.ClientSession() as session:
+        configuration = Configuration.from_runnable_config(config)
+        
+        url = "https://booking-com15.p.rapidapi.com/api/v1/meta/getCurrency"
+    
+        headers = {
+            "x-rapidapi-key": configuration.booking_api_key,
+            "x-rapidapi-host": "booking-com15.p.rapidapi.com"
+        }
+
+        async with session.get(url, headers=headers) as response:
+            response.raise_for_status()
+            return await response.json()
+
+async def get_hotel_location_id(
+        location_query: str,
+        config: Annotated[RunnableConfig, InjectedToolArg]
+) -> dict:
+    """Use to get all hotel_location_ids based on location query."""
+    async with aiohttp.ClientSession() as session:
+
+        configuration = Configuration.from_runnable_config(config)
+
+        url = "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination"
+
+        querystring = {"query":{location_query}}
+
+        headers = {
+            "x-rapidapi-key": configuration.booking_api_key,
+            "x-rapidapi-host": "booking-com15.p.rapidapi.com"
+        }
+
+        async with session.get(url, headers=headers, params=querystring) as response:
+            response.raise_for_status()
+
+            return await response.json() 
+
+async def get_hotel_ids(
+        config: Annotated[RunnableConfig, InjectedToolArg],
+        dest_id: str,
+        search_type: str,
+        arrival_date: str,
+        departure_date: str,
+        adults: int = 1,
+        children_ages: list[int] = None,
+        room_qty: int = 1,
+        currency_code: str = None
+) -> dict:
+    """
+    Get hotel search results based on location and search criteria.
+    
+    Parameters:
+    -----------
+    config : RunnableConfig
+        Configuration object containing API keys and settings.
+    dest_id : str
+        Destination ID retrieved from 'api/v1/hotels/searchDestination' endpoint.
+    search_type : str
+        Search type retrieved from 'api/v1/hotels/searchDestination' endpoint.
+    arrival_date : str
+        Check-in date in 'yyyy-mm-dd' format.
+    departure_date : str
+        Check-out date in 'yyyy-mm-dd' format.
+    adults : int, optional
+        Number of guests who are 18 years of age or older. Default is 1.
+    children_age : list[int], optional
+        List of ages for children under 18 years. For example: [0, 1, 17].
+    room_qty : int, optional
+        Number of rooms required. Default is 1.
+    currency_code : str, optional
+        Currency code for pricing. Can be retrieved from 'api/v1/meta/getCurrency' endpoint.
+        
+    Returns:
+    --------
+    dict
+        JSON response containing hotel search results.
+    """  # noqa: D212
+    async with aiohttp.ClientSession() as session:
+        configuration = Configuration.from_runnable_config(config)
+        
+        url = "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels"
+        
+
+        querystring = {
+            "dest_id": dest_id,
+            "search_type": search_type,
+            "arrival_date": arrival_date,
+            "departure_date": departure_date,
+            "adults": adults,
+            "room_qty": room_qty,
+            "page_number": "1",
+            "units": "metric",
+            "temperature_unit": "c",
+            "languagecode": "en-us",
+        }
+        
+        # Add optional parameters only if they are provided
+        if children_ages:
+            querystring["children_age"] = children_ages
+        if currency_code:
+            querystring["currency_code"] = currency_code
+
+        headers = {
+            "x-rapidapi-key": configuration.booking_api_key,
+            "x-rapidapi-host": "booking-com15.p.rapidapi.com"
+        }
+
+        async with session.get(url, headers=headers, params=querystring) as response:
+            response.raise_for_status()
+            return await response.json()
 
 TOOLS: List[Callable[..., Any]] = [tavily_web_search, query_google_places]

@@ -19,7 +19,8 @@ class InputState:
     This class is used to define the initial state and structure of incoming data.
     """
     
-    messages: Annotated[List[BaseMessage], add_messages]
+    itinerary_messages: Annotated[List[BaseMessage], add_messages]
+    hotel_messages: Annotated[List[BaseMessage], add_messages]
 
 
 @dataclass
@@ -30,6 +31,7 @@ class State(InputState):
     """
     
     user_profile: dict = field(default_factory=dict)
+    user_accomodation: dict = field(default_factory=dict)
     itinerary: dict = field(default_factory=dict)
     itinerary_feedback: str = field(default="")
     iteration_counter: int = field(default=0)

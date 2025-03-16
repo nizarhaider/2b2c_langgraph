@@ -169,12 +169,13 @@ REFLECTION_ITINERARY_PROMPT = """
 You are tasked with evaluating the output of the generated travel itinerary based on the user’s profile/query.
 
 Here is the user profile:
-
 {USER_PROFILE}
 
 Here is what the ITINERARY_SCHEMA is supposed to look like:
-
 {ITINERARY_SCHEMA}
+
+Here is what the feedback of the final itinerary from the user looks like:
+{PREVIOUS_FEEDBACK}
 
 
 ### Points to Reflect On:
@@ -208,12 +209,43 @@ Here is what the ITINERARY_SCHEMA is supposed to look like:
 - If needed, suggest **adjustments to the activities** or **rearranging the itinerary** to better fit the user’s budget, preferences, or time constraints.
 """
 
+USER_ACCOMODATIONS_INPUT_PROMPT = """
+Your job is to get additional information from the user to help with searching accomodations/hotels.
 
+Here is some context.
+1. We have already generated the travel itinerary for the user but have yet to find hotles.
+2. Here is the current approved itinerary:
+{ITINERARY}
+3. Here is the current information we have on the user:
+{USER_PROFILE}
+4. Here is the current accomodations schema:
+{USER_ACCOMODATION_SCHEMA}
+5. Here is the updated accomodations information:
+{USER_ACCOMODATION}
 
+Kindly prompt the user for the required information as well as some optional ones casually. 
+Don't overload the user with a lot of information so try to infer information as much as you can.
+Use the defaults in the cases where you can't get a value.
+"""
 
 HOTELS_SEARCH_PROMPT = """
-Your job is to look up for nearby hotels based on the locations in:
-{destinations}.
+Your job is to look up for nearby hotels based on the provided itinerary:
+
+ITINERARY
+{ITINERARY}
+
+Here is the USER PROFILE
+{USER_PROFILE}
+
+Here are the steps you can take to find the right hotels.
+1. First extract relevant information like destinations from ITINERARY and other information from USER_PROFILE.
+2. Call the get_hotel_currencies api first to see if they have the same currency as the user profile. If not then use USD.
+3. Call the get_hotel_location_id for each location in the itinerary and get the most relevant destination_id.
+4. Call the get_hotel_ids to get hotel_id's and pass in the required information to the best of accuracy.
+5. 
 
 Use your hotel booking tool to find the hotels and return their information. 
 """
+
+
+
