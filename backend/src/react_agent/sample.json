@@ -1,0 +1,454 @@
+{
+    "trip": {
+        "id": 1058636,
+        "name": "Budget-Friendly Travel Tips for Sri Lanka Under $1000",
+        "destination_name": "Kandy",
+        "destination_entity_ref": "lo-UGqMeMKF",
+        "time_zone": "Asia/Colombo",
+        "user_created": true,
+        "time_frame": {
+            "duration": 7,
+            "start_date": {
+                "year": 2025,
+                "month": 6,
+                "day": 14
+            }
+        },
+        "draft_start_date": {
+            "year": 2025,
+            "month": 6,
+            "day": 14
+        },
+        "draft_duration": 7,
+        "travelers": {
+            "adult_count": 3,
+            "pet_count": 0,
+            "infant_count": 0,
+            "child_count": 0
+        },
+        "cover_photo": {
+            "url": "https://cdn.sanity.io/images/cpvxwd28/production/96e1dc6f5f0d50c6a74f8396d2ff764711b3773a-3456x5184.jpg",
+            "width": 3456,
+            "height": 5184,
+            "additional_information": {
+                "photo_link": "https://unsplash.com/photos/city-skyline-near-body-of-water-during-daytime-btc7lo_Er4Y",
+                "photographer_name": "Florian Wehde",
+                "photographer_link": "https://unsplash.com/@florianwehde",
+                "location_name": "Kandy, Sri Lanka"
+            }
+        },
+        "budget": "$",
+        "destination": {
+            "name": "Kandy",
+            "country_code": "LK",
+            "latitude": 7.293553,
+            "longitude": 80.63852,
+            "canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+            "canonical_location": "kandy-central",
+            "canonical_name": "kandy",
+            "location_canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+            "shareable_urls": [
+                {
+                    "name": "Facebook",
+                    "icon": "facebook",
+                    "url": "https://www.facebook.com/dialog/feed?app_id=987849839654033\u0026link=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dfacebook\u0026name=Check+out+Kandy+on+Mindtrip\u0026redirect_uri=https%3A%2F%2Fwww.facebook.com"
+                },
+                {
+                    "name": "X",
+                    "icon": "x",
+                    "url": "https://twitter.com/intent/tweet?text=Check+out+Kandy+on+Mindtrip\u0026url=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dx"
+                }
+            ],
+            "entity_ref": "lo-UGqMeMKF",
+            "status": "OPERATIONAL",
+            "providers": [
+                "google_places"
+            ],
+            "has_sanity_data": true,
+            "pscore": 0.9800185902475715,
+            "photos": [
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/96e1dc6f5f0d50c6a74f8396d2ff764711b3773a-3456x5184.jpg",
+                    "width": 3456,
+                    "height": 5184,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/city-skyline-near-body-of-water-during-daytime-btc7lo_Er4Y",
+                        "photographer_name": "Florian Wehde",
+                        "photographer_link": "https://unsplash.com/@florianwehde",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/b699ed21352afed74e9fc0eec9efac7342c2fe8e-2810x3097.jpg",
+                    "width": 2810,
+                    "height": 3097,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/people-at-the-temple-during-daytime-J_QFbakDiYQ",
+                        "photographer_name": "Tharaka Jayasuriya",
+                        "photographer_link": "https://unsplash.com/@tharaka16237",
+                        "location_name": "Nelligala Rd, Sri Lanka, Kandy"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/a87b04cf3bec6118c93a954d25bd72a733dce3b5-3781x4893.jpg",
+                    "width": 3781,
+                    "height": 4893,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/man-wearing-black-shirt-standing-on-stair-gWK12rFn4Wc",
+                        "photographer_name": "Alex Azabache",
+                        "photographer_link": "https://unsplash.com/@alexazabache",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/c43902b92070c4de3dcaa0bcace0fc8f75b2dbf4-6054x4036.jpg",
+                    "width": 6054,
+                    "height": 4036,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/a-train-traveling-through-a-lush-green-forest-e5TZ3LH_-70",
+                        "photographer_name": "Austin Curtis",
+                        "photographer_link": "https://unsplash.com/@afcurtis",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/0850fddd3dbcbea6937aa1a5dfae36e792ed42f1-4000x6000.jpg",
+                    "width": 4000,
+                    "height": 6000,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/a-man-walking-down-a-road-surrounded-by-palm-trees-kGiHN1CJ7Bo",
+                        "photographer_name": "sander traa",
+                        "photographer_link": "https://unsplash.com/@sandertraa",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                }
+            ],
+            "place_country": "LK",
+            "city": "Kandy",
+            "country": "Sri Lanka",
+            "region": "Central Province",
+            "continent": "Asia",
+            "formatted_address": "Kandy, Sri Lanka",
+            "time_zone": "Asia/Colombo",
+            "type": "location",
+            "categories": [],
+            "description": "Kandy, located in the Kandy District of Sri Lanka, is a vibrant city known for its rich cultural heritage and scenic beauty. The",
+            "category": "municipality",
+            "category_tier": "city_tier",
+            "population": 161000,
+            "density": 47.15479661294301
+        },
+        "major_stops_details": [
+            {
+                "entity_ref": "lo-UGqMeMKF",
+                "location": {
+                    "name": "Kandy",
+                    "country_code": "LK",
+                    "latitude": 7.293553,
+                    "longitude": 80.63852,
+                    "canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+                    "canonical_location": "kandy-central",
+                    "canonical_name": "kandy",
+                    "location_canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+                    "shareable_urls": [
+                        {
+                            "name": "Facebook",
+                            "icon": "facebook",
+                            "url": "https://www.facebook.com/dialog/feed?app_id=987849839654033\u0026link=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dfacebook\u0026name=Check+out+Kandy+on+Mindtrip\u0026redirect_uri=https%3A%2F%2Fwww.facebook.com"
+                        },
+                        {
+                            "name": "X",
+                            "icon": "x",
+                            "url": "https://twitter.com/intent/tweet?text=Check+out+Kandy+on+Mindtrip\u0026url=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dx"
+                        }
+                    ],
+                    "entity_ref": "lo-UGqMeMKF",
+                    "status": "OPERATIONAL",
+                    "providers": [
+                        "google_places"
+                    ],
+                    "has_sanity_data": true,
+                    "pscore": 0.9800185902475715,
+                    "photos": [
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/96e1dc6f5f0d50c6a74f8396d2ff764711b3773a-3456x5184.jpg",
+                            "width": 3456,
+                            "height": 5184,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/city-skyline-near-body-of-water-during-daytime-btc7lo_Er4Y",
+                                "photographer_name": "Florian Wehde",
+                                "photographer_link": "https://unsplash.com/@florianwehde",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/b699ed21352afed74e9fc0eec9efac7342c2fe8e-2810x3097.jpg",
+                            "width": 2810,
+                            "height": 3097,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/people-at-the-temple-during-daytime-J_QFbakDiYQ",
+                                "photographer_name": "Tharaka Jayasuriya",
+                                "photographer_link": "https://unsplash.com/@tharaka16237",
+                                "location_name": "Nelligala Rd, Sri Lanka, Kandy"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/a87b04cf3bec6118c93a954d25bd72a733dce3b5-3781x4893.jpg",
+                            "width": 3781,
+                            "height": 4893,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/man-wearing-black-shirt-standing-on-stair-gWK12rFn4Wc",
+                                "photographer_name": "Alex Azabache",
+                                "photographer_link": "https://unsplash.com/@alexazabache",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/c43902b92070c4de3dcaa0bcace0fc8f75b2dbf4-6054x4036.jpg",
+                            "width": 6054,
+                            "height": 4036,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/a-train-traveling-through-a-lush-green-forest-e5TZ3LH_-70",
+                                "photographer_name": "Austin Curtis",
+                                "photographer_link": "https://unsplash.com/@afcurtis",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/0850fddd3dbcbea6937aa1a5dfae36e792ed42f1-4000x6000.jpg",
+                            "width": 4000,
+                            "height": 6000,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/a-man-walking-down-a-road-surrounded-by-palm-trees-kGiHN1CJ7Bo",
+                                "photographer_name": "sander traa",
+                                "photographer_link": "https://unsplash.com/@sandertraa",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        }
+                    ],
+                    "place_country": "LK",
+                    "city": "Kandy",
+                    "country": "Sri Lanka",
+                    "region": "Central Province",
+                    "continent": "Asia",
+                    "formatted_address": "Kandy, Sri Lanka",
+                    "time_zone": "Asia/Colombo",
+                    "type": "location",
+                    "categories": [],
+                    "description": "Kandy, located in the Kandy District of Sri Lanka, is a vibrant city known for its rich cultural heritage and scenic beauty. The",
+                    "category": "municipality",
+                    "category_tier": "city_tier",
+                    "population": 161000,
+                    "density": 47.15479661294301
+                }
+            }
+        ],
+        "stops_area": {
+            "name": "Kandy",
+            "country_code": "LK",
+            "latitude": 7.293553,
+            "longitude": 80.63852,
+            "canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+            "canonical_location": "kandy-central",
+            "canonical_name": "kandy",
+            "location_canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+            "shareable_urls": [
+                {
+                    "name": "Facebook",
+                    "icon": "facebook",
+                    "url": "https://www.facebook.com/dialog/feed?app_id=987849839654033\u0026link=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dfacebook\u0026name=Check+out+Kandy+on+Mindtrip\u0026redirect_uri=https%3A%2F%2Fwww.facebook.com"
+                },
+                {
+                    "name": "X",
+                    "icon": "x",
+                    "url": "https://twitter.com/intent/tweet?text=Check+out+Kandy+on+Mindtrip\u0026url=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dx"
+                }
+            ],
+            "entity_ref": "lo-UGqMeMKF",
+            "status": "OPERATIONAL",
+            "providers": [
+                "google_places"
+            ],
+            "has_sanity_data": true,
+            "pscore": 0.9800185902475715,
+            "photos": [
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/96e1dc6f5f0d50c6a74f8396d2ff764711b3773a-3456x5184.jpg",
+                    "width": 3456,
+                    "height": 5184,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/city-skyline-near-body-of-water-during-daytime-btc7lo_Er4Y",
+                        "photographer_name": "Florian Wehde",
+                        "photographer_link": "https://unsplash.com/@florianwehde",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/b699ed21352afed74e9fc0eec9efac7342c2fe8e-2810x3097.jpg",
+                    "width": 2810,
+                    "height": 3097,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/people-at-the-temple-during-daytime-J_QFbakDiYQ",
+                        "photographer_name": "Tharaka Jayasuriya",
+                        "photographer_link": "https://unsplash.com/@tharaka16237",
+                        "location_name": "Nelligala Rd, Sri Lanka, Kandy"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/a87b04cf3bec6118c93a954d25bd72a733dce3b5-3781x4893.jpg",
+                    "width": 3781,
+                    "height": 4893,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/man-wearing-black-shirt-standing-on-stair-gWK12rFn4Wc",
+                        "photographer_name": "Alex Azabache",
+                        "photographer_link": "https://unsplash.com/@alexazabache",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/c43902b92070c4de3dcaa0bcace0fc8f75b2dbf4-6054x4036.jpg",
+                    "width": 6054,
+                    "height": 4036,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/a-train-traveling-through-a-lush-green-forest-e5TZ3LH_-70",
+                        "photographer_name": "Austin Curtis",
+                        "photographer_link": "https://unsplash.com/@afcurtis",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                },
+                {
+                    "url": "https://cdn.sanity.io/images/cpvxwd28/production/0850fddd3dbcbea6937aa1a5dfae36e792ed42f1-4000x6000.jpg",
+                    "width": 4000,
+                    "height": 6000,
+                    "additional_information": {
+                        "photo_link": "https://unsplash.com/photos/a-man-walking-down-a-road-surrounded-by-palm-trees-kGiHN1CJ7Bo",
+                        "photographer_name": "sander traa",
+                        "photographer_link": "https://unsplash.com/@sandertraa",
+                        "location_name": "Kandy, Sri Lanka"
+                    }
+                }
+            ],
+            "place_country": "LK",
+            "city": "Kandy",
+            "country": "Sri Lanka",
+            "region": "Central Province",
+            "continent": "Asia",
+            "formatted_address": "Kandy, Sri Lanka",
+            "time_zone": "Asia/Colombo",
+            "type": "location",
+            "categories": [],
+            "description": "Kandy, located in the Kandy District of Sri Lanka, is a vibrant city known for its rich cultural heritage and scenic beauty. The",
+            "category": "municipality",
+            "category_tier": "city_tier",
+            "population": 161000,
+            "density": 47.15479661294301
+        },
+        "collaboration": false,
+        "trip_stops": [],
+        "major_stops": [
+            {
+                "entity_ref": "lo-UGqMeMKF",
+                "location": {
+                    "name": "Kandy",
+                    "country_code": "LK",
+                    "latitude": 7.293553,
+                    "longitude": 80.63852,
+                    "canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+                    "canonical_location": "kandy-central",
+                    "canonical_name": "kandy",
+                    "location_canonical_url": "https://mindtrip.ai/location/kandy-central/kandy/lo-UGqMeMKF",
+                    "shareable_urls": [
+                        {
+                            "name": "Facebook",
+                            "icon": "facebook",
+                            "url": "https://www.facebook.com/dialog/feed?app_id=987849839654033\u0026link=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dfacebook\u0026name=Check+out+Kandy+on+Mindtrip\u0026redirect_uri=https%3A%2F%2Fwww.facebook.com"
+                        },
+                        {
+                            "name": "X",
+                            "icon": "x",
+                            "url": "https://twitter.com/intent/tweet?text=Check+out+Kandy+on+Mindtrip\u0026url=https%3A%2F%2Fmindtrip.ai%2Flocation%2Fkandy-central%2Fkandy%2Flo-UGqMeMKF%3Futm_campaign%3Dshare%26utm_medium%3Dsocial%26utm_source%3Dx"
+                        }
+                    ],
+                    "entity_ref": "lo-UGqMeMKF",
+                    "status": "OPERATIONAL",
+                    "providers": [
+                        "google_places"
+                    ],
+                    "has_sanity_data": true,
+                    "pscore": 0.9800185902475715,
+                    "photos": [
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/96e1dc6f5f0d50c6a74f8396d2ff764711b3773a-3456x5184.jpg",
+                            "width": 3456,
+                            "height": 5184,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/city-skyline-near-body-of-water-during-daytime-btc7lo_Er4Y",
+                                "photographer_name": "Florian Wehde",
+                                "photographer_link": "https://unsplash.com/@florianwehde",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/b699ed21352afed74e9fc0eec9efac7342c2fe8e-2810x3097.jpg",
+                            "width": 2810,
+                            "height": 3097,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/people-at-the-temple-during-daytime-J_QFbakDiYQ",
+                                "photographer_name": "Tharaka Jayasuriya",
+                                "photographer_link": "https://unsplash.com/@tharaka16237",
+                                "location_name": "Nelligala Rd, Sri Lanka, Kandy"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/a87b04cf3bec6118c93a954d25bd72a733dce3b5-3781x4893.jpg",
+                            "width": 3781,
+                            "height": 4893,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/man-wearing-black-shirt-standing-on-stair-gWK12rFn4Wc",
+                                "photographer_name": "Alex Azabache",
+                                "photographer_link": "https://unsplash.com/@alexazabache",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/c43902b92070c4de3dcaa0bcace0fc8f75b2dbf4-6054x4036.jpg",
+                            "width": 6054,
+                            "height": 4036,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/a-train-traveling-through-a-lush-green-forest-e5TZ3LH_-70",
+                                "photographer_name": "Austin Curtis",
+                                "photographer_link": "https://unsplash.com/@afcurtis",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        },
+                        {
+                            "url": "https://cdn.sanity.io/images/cpvxwd28/production/0850fddd3dbcbea6937aa1a5dfae36e792ed42f1-4000x6000.jpg",
+                            "width": 4000,
+                            "height": 6000,
+                            "additional_information": {
+                                "photo_link": "https://unsplash.com/photos/a-man-walking-down-a-road-surrounded-by-palm-trees-kGiHN1CJ7Bo",
+                                "photographer_name": "sander traa",
+                                "photographer_link": "https://unsplash.com/@sandertraa",
+                                "location_name": "Kandy, Sri Lanka"
+                            }
+                        }
+                    ],
+                    "place_country": "LK",
+                    "city": "Kandy",
+                    "country": "Sri Lanka",
+                    "region": "Central Province",
+                    "continent": "Asia",
+                    "formatted_address": "Kandy, Sri Lanka",
+                    "time_zone": "Asia/Colombo",
+                    "type": "location",
+                    "categories": [],
+                    "description": "Kandy, located in the Kandy District of Sri Lanka, is a vibrant city known for its rich cultural heritage and scenic beauty. The",
+                    "category": "municipality",
+                    "category_tier": "city_tier",
+                    "population": 161000,
+                    "density": 47.15479661294301
+                }
+            }
+        ]
+    }
+}
