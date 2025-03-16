@@ -170,7 +170,7 @@ def review_itinerary(
 
     counter = state.iteration_counter
 
-    if response['is_satisfactory'] or counter >= 2:
+    if response['is_satisfactory'] or counter >= 0:
         return Command(
             goto='validate_itinerary'
         )
